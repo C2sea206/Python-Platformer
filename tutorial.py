@@ -6,7 +6,7 @@ from os import listdir
 from os.path import isfile, join
 pygame.init()
 
-pygame.display.set_caption("Platformer")
+pygame.display.set_caption("Dan The Hipster")
 
 WIDTH, HEIGHT = 1000, 800
 FPS = 60
@@ -56,7 +56,7 @@ def get_block(size):
 class Player(pygame.sprite.Sprite):
     COLOR = (255, 0, 0)
     GRAVITY = 1
-    SPRITES = load_sprite_sheets("MainCharacters", "VirtualGuy", 32, 32, True)
+    SPRITES = load_sprite_sheets("MainCharacters", "NinjaFrog", 32, 32, True)
     ANIMATION_DELAY = 3
 
     def __init__(self, x, y, width, height):
@@ -290,11 +290,13 @@ def main(window):
 
     player = Player(100, 100, 50, 50)
     fire = Fire(600, HEIGHT - block_size - 64, 16, 32)
+    fireOne = Fire(350, 512 - block_size - 64, 16, 32)
     fire.on()
+    fireOne.on()
     #floor = [Block(i * block_size, HEIGHT - block_size, block_size)
              #for i in range(-WIDTH // block_size, (WIDTH * 2) // block_size)]
-    objects = [*floor, Block(100, HEIGHT - block_size * 2, block_size),
-               Block(block_size * 3, HEIGHT - block_size * 4, block_size), fire]
+    objects = [*floor, Block(100, HEIGHT - block_size * 2, block_size),*floor, Block(500, 400 - block_size * 2, block_size), Block(850, 400 - block_size * 2, block_size), Block(1300, 350 - block_size * 2, block_size),
+                Block(block_size * 3, HEIGHT - block_size * 4, block_size), fire, Block(block_size * 3, HEIGHT - block_size * 4, block_size), fireOne,]
 
     offset_x = 0
     scroll_area_width = 200
@@ -314,6 +316,7 @@ def main(window):
 
         player.loop(FPS)
         fire.loop()
+        fireOne.loop()
         handle_move(player, objects)
         draw(window, background, bg_image, player, objects, offset_x)
 

@@ -56,7 +56,7 @@ def get_block(size):
 class Player(pygame.sprite.Sprite):
     COLOR = (255, 0, 0)
     GRAVITY = 1
-    SPRITES = load_sprite_sheets("MainCharacters", "MaskDude", 32, 32, True)
+    SPRITES = load_sprite_sheets("MainCharacters", "VirtualGuy", 32, 32, True)
     ANIMATION_DELAY = 3
 
     def __init__(self, x, y, width, height):
@@ -203,7 +203,7 @@ class Fire(Object):
 
 
 def get_background(name):
-    image = pygame.image.load(join("assets", "Background", name))
+    image = pygame.image.load(join("assets", "Background", "Pink.png"))
     _, _, width, height = image.get_rect()
     tiles = []
 
@@ -282,13 +282,18 @@ def main(window):
     background, bg_image = get_background("Blue.png")
 
     block_size = 96
+    #testing 
+    num_blocks = math.ceil(WIDTH / block_size)
+    # Generate floor blocks across the entire screen width
+    floor = [Block(i * block_size, HEIGHT - block_size, block_size)
+         for i in range(-num_blocks, num_blocks + 50)]
 
     player = Player(100, 100, 50, 50)
-    fire = Fire(100, HEIGHT - block_size - 64, 16, 32)
+    fire = Fire(600, HEIGHT - block_size - 64, 16, 32)
     fire.on()
-    floor = [Block(i * block_size, HEIGHT - block_size, block_size)
-             for i in range(-WIDTH // block_size, (WIDTH * 2) // block_size)]
-    objects = [*floor, Block(0, HEIGHT - block_size * 2, block_size),
+    #floor = [Block(i * block_size, HEIGHT - block_size, block_size)
+             #for i in range(-WIDTH // block_size, (WIDTH * 2) // block_size)]
+    objects = [*floor, Block(100, HEIGHT - block_size * 2, block_size),
                Block(block_size * 3, HEIGHT - block_size * 4, block_size), fire]
 
     offset_x = 0
@@ -312,9 +317,14 @@ def main(window):
         handle_move(player, objects)
         draw(window, background, bg_image, player, objects, offset_x)
 
-        if ((player.rect.right - offset_x >= WIDTH - scroll_area_width) and player.x_vel > 0) or (
-                (player.rect.left - offset_x <= scroll_area_width) and player.x_vel < 0):
+        #if ((player.rect.right - offset_x >= WIDTH - scroll_area_width) and player.x_vel > 0) or (
+                #(player.rect.left - offset_x <= scroll_area_width) and player.x_vel < 0):
+            #offset_x += player.x_vel
+        if (player.rect.right - offset_x >= WIDTH - scroll_area_width) and player.x_vel > 0:
             offset_x += player.x_vel
+        elif (player.rect.left - offset_x <= scroll_area_width) and player.x_vel < 0:
+            offset_x += player.x_vel
+
 
     pygame.quit()
     quit()
